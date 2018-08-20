@@ -1,0 +1,7 @@
+allure-results
+target
+.allure
+.idea/
+PayconiqAPI.iml
+build
+*.log
