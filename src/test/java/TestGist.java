@@ -2,31 +2,39 @@ import client.GistsApiClient;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import io.qameta.allure.junit4.DisplayName;
 import io.restassured.response.Response;
-import models.GetGistsDto;
+import models.FileDto;
+import models.GistsDto;
 import models.PostGistDto;
-import models.UpdateGistDto;
 import org.apache.commons.lang3.StringUtils;
+import org.junit.AfterClass;
 import org.junit.Assert;
 import org.junit.Test;
 
 import java.io.IOException;
+import java.util.Arrays;
 import java.util.HashMap;
 import java.util.Objects;
-import java.util.Set;
 import java.util.UUID;
 
 import static io.restassured.RestAssured.given;
 
-
 public class TestGist {
-	private GistsApiClient client = new GistsApiClient();
+	private static GistsApiClient client = new GistsApiClient();
 
 	@Test
 	@DisplayName("Verify that it's possible to get list of available gists")
 	public void testGetGists() throws IOException {
-		GetGistsDto.GistDetails[] parsedGists = client.getParsedGists();
+		HashMap<String, FileDto> inputFiles = generateFiles(3);
+		PostGistDto.GistDetails postGistsRequest = PostGistDto.GistDetails.builder()
+				.description("bla")
+				.isPublic(true)
+				.files(inputFiles)
+				.build();
 
-		for (GetGistsDto.GistDetails gist : parsedGists) {
+		client.postGist(postGistsRequest);
+		GistsDto.GistDetails[] parsedGists = client.getParsedGists();
+
+		for (GistsDto.GistDetails gist : parsedGists) {
 			Assert.assertTrue(Objects.nonNull(gist.getId()));
 			Assert.assertTrue(StringUtils.isNoneEmpty(gist.getId()));
 		}
@@ -48,11 +56,7 @@ public class TestGist {
 	@Test
 	@DisplayName("Verify that it's possible to post gists")
 	public void testPostGist() throws IOException {
-		HashMap<String, PostGistDto.FileContent> inputFiles = new HashMap<>();
-		for (int i = 0; i < 3; i++) {
-			inputFiles.put(UUID.randomUUID().toString(), new PostGistDto.FileContent(UUID.randomUUID().toString()));
-		}
-
+		HashMap<String, FileDto> inputFiles = generateFiles(3);
 		PostGistDto.GistDetails postGistsRequest = PostGistDto.GistDetails.builder()
 				.description("bla")
 				.isPublic(true)
@@ -63,48 +67,17 @@ public class TestGist {
 		Assert.assertEquals(201, response.getStatusCode());
 
 		ObjectMapper objectMapper = new ObjectMapper();
-		PostGistDto.PostGistResponse postGistResponse = objectMapper.readValue(response.getBody().print(), PostGistDto.PostGistResponse.class);
+		GistsDto.GistDetails postGistResponse = objectMapper.readValue(response.getBody().print(), GistsDto.GistDetails.class);
 
-		HashMap<String, PostGistDto.FileContent> responseFiles = postGistResponse.getFiles();
+		HashMap<String, FileDto> responseFiles = postGistResponse.getFiles();
 
-		responseFiles.forEach((String responseFilesName, PostGistDto.FileContent responseFile) -> {
-			Assert.assertTrue(inputFiles.containsKey(responseFilesName));
-			PostGistDto.FileContent inputFile = inputFiles.get(responseFilesName);
-			Assert.assertEquals(inputFile.getContent(), responseFile.getContent());
-		});
+		assertFilesEquals(inputFiles, responseFiles);
 	}
-
-//	@Test
-//	@DisplayName("Test POST gist")
-//	public void testPostGist() throws IOException, ParseException {
-//
-//		JsonPath postResp = client.postGist("postGist.json", 201);
-//
-//		Assert.assertThat(postResp.get().toString(), containsString("id"));
-//		Assert.assertTrue(postResp.getMap("files").size() == 4);
-//		Assert.assertTrue("Response does not have file",
-//				postResp.getMap("files").containsKey("hello_world_ruby.txt"));
-//		Assert.assertTrue("Response does not have file",
-//				postResp.getMap("files").containsKey("hello_world.rb"));
-//		Assert.assertTrue("Response does not have file",
-//				postResp.getMap("files").containsKey("hello_world_python.txt"));
-//		Assert.assertTrue("Response does not have file",
-//				postResp.getMap("files").containsKey("hello_world_ruby.txt"));
-//
-////		JsonPath getResp = client.getGists();
-////		String id = postResp.get("id").toString();
-////		Assert.assertTrue(getResp.getList("id").contains(id));
-//	}
 
 	@Test
 	@DisplayName("Verify that it's possible to get gist by id")
 	public void testGetGistById() throws IOException {
-
-		HashMap<String, PostGistDto.FileContent> inputFiles = new HashMap<>();
-		for (int i = 0; i < 3; i++) {
-			inputFiles.put(UUID.randomUUID().toString(), new PostGistDto.FileContent(UUID.randomUUID().toString()));
-		}
-
+		HashMap<String, FileDto> inputFiles = generateFiles(3);
 		PostGistDto.GistDetails postGistsRequest = PostGistDto.GistDetails.builder()
 				.description("bla")
 				.isPublic(true)
@@ -115,20 +88,15 @@ public class TestGist {
 		Assert.assertEquals(201, postResponse.getStatusCode());
 
 		ObjectMapper objectMapper = new ObjectMapper();
-		PostGistDto.PostGistResponse postGistResponse = objectMapper.readValue(postResponse.getBody().print(), PostGistDto.PostGistResponse.class);
+		GistsDto.GistDetails postGistResponse = objectMapper.readValue(postResponse.getBody().print(), GistsDto.GistDetails.class);
 
 		Response getResponse = client.getGistById(postGistResponse.getId());
-		GetGistsDto.GetGistResponse getGistResponse = objectMapper.readValue(getResponse.getBody().print(), GetGistsDto.GetGistResponse.class);
+		GistsDto.GistDetails getGistResponse = objectMapper.readValue(getResponse.getBody().print(), GistsDto.GistDetails.class);
 
-		HashMap<String, GetGistsDto.FileContent> responseFiles = getGistResponse.getFiles();
+		HashMap<String, FileDto> responseFiles = getGistResponse.getFiles();
 
 		Assert.assertEquals(200, getResponse.getStatusCode());
-
-		responseFiles.forEach((String responseFilesName, GetGistsDto.FileContent responseFile) -> {
-			Assert.assertTrue(inputFiles.containsKey(responseFilesName));
-			PostGistDto.FileContent inputFile = inputFiles.get(responseFilesName);
-			Assert.assertEquals(inputFile.getContent(), responseFile.getContent());
-		});
+		assertFilesEquals(inputFiles, responseFiles);
 	}
 
 	@Test
@@ -141,13 +109,7 @@ public class TestGist {
 	@Test
 	@DisplayName("Verify that it's possible to update gist by id")
 	public void testUpdateGist() throws IOException {
-		HashMap<String, PostGistDto.FileContent> inputFiles = new HashMap<>();
-		for (int i = 0; i < 3; i++) {
-			inputFiles.put(UUID.randomUUID().toString(), new PostGistDto.FileContent(UUID.randomUUID().toString()));
-		}
-
-		HashMap<String, PostGistDto.FileContent> initialInput = (HashMap<String, PostGistDto.FileContent>)inputFiles;
-
+		HashMap<String, FileDto> inputFiles = generateFiles(3);
 		PostGistDto.GistDetails postGistsRequest = PostGistDto.GistDetails.builder()
 				.description("bla")
 				.isPublic(true)
@@ -156,58 +118,31 @@ public class TestGist {
 
 		Response postResponse = client.postGistWithResponse(postGistsRequest);
 		Assert.assertEquals(201, postResponse.getStatusCode());
-		ObjectMapper objectMapper = new ObjectMapper();
-		PostGistDto.PostGistResponse postGistResponse = objectMapper.readValue(postResponse.getBody().print(), PostGistDto.PostGistResponse.class);
 
+		ObjectMapper objectMapper = new ObjectMapper();
+		GistsDto.GistDetails postGistResponse = objectMapper.readValue(postResponse.getBody().print(), GistsDto.GistDetails.class);
 		String id = postGistResponse.getId();
 
 		String  key = inputFiles.keySet().toArray()[0].toString();
-		inputFiles.remove(key);
+		inputFiles.put(key, null);
 
-
-		PostGistDto.GistDetails updateGistsRequest = UpdateGistDto.GistDetails.builder()
+		PostGistDto.GistDetails updateGistsRequest = PostGistDto.GistDetails.builder()
 				.description("bla")
 				.isPublic(true)
 				.files(inputFiles)
 				.build();
 
 		Response updateResponse = client.updateGist(updateGistsRequest, id);
-		UpdateGistDto.UpdateGistResponse updateGistResponse = objectMapper.readValue(updateResponse.getBody().print(), UpdateGistDto.UpdateGistResponse.class);
+		GistsDto.GistDetails updateGistResponse = objectMapper.readValue(updateResponse.getBody().print(), GistsDto.GistDetails.class);
+		HashMap<String, FileDto> responseFiles = updateGistResponse.getFiles();
 
-		HashMap<String, UpdateGistDto.FileContent> responseFiles = updateGistResponse.getFiles();
-
-
-		responseFiles.forEach((String responseFilesName, UpdateGistDto.FileContent responseFile) -> {
-			Assert.assertTrue(updatedFiles.containsKey(responseFilesName));
-			UpdateGistDto.FileContent inputFile = updatedFiles.get(responseFilesName);
-			Assert.assertEquals(inputFile.getContent(), responseFile.getContent());
-		});
-
-
-//		JsonPath postResp = client.postGist("postGist.json", 201);
-//		Assert.assertTrue(postResp.getMap("files").size() == 4);
-//		String id = postResp.get("id").toString();
-//		JsonPath updateResp = client.updateGist(id, "updateGist.json", 201);
-//		Assert.assertTrue(updateResp.getMap("files").size() == 2);
-//		Assert.assertTrue("Response does not have file",
-//				updateResp.getMap("files").containsKey("hello_world.py"));
-//		Assert.assertTrue("Response does not have file",
-//				updateResp.getMap("files").containsKey("hello_world.rb"));
-//		Assert.assertFalse("Response does not have file",
-//				updateResp.getMap("files").containsKey("hello_world_python.txt"));
-//		Assert.assertFalse("Response does not have file",
-//				updateResp.getMap("files").containsKey("hello_world_ruby.txt"));
-
+		assertFilesEquals(inputFiles, responseFiles);
 	}
 
 	@Test
 	@DisplayName("TVerify that it's  possible to delete gist by id")
 	public void testDeleteGists() throws IOException {
-		HashMap<String, PostGistDto.FileContent> inputFiles = new HashMap<>();
-		for (int i = 0; i < 3; i++) {
-			inputFiles.put(UUID.randomUUID().toString(), new PostGistDto.FileContent(UUID.randomUUID().toString()));
-		}
-
+		HashMap<String, FileDto> inputFiles = generateFiles(3);
 		PostGistDto.GistDetails postGistsRequest = PostGistDto.GistDetails.builder()
 				.description("bla")
 				.isPublic(true)
@@ -217,15 +152,13 @@ public class TestGist {
 		Response postResponse = client.postGistWithResponse(postGistsRequest);
 		Assert.assertEquals(201, postResponse.getStatusCode());
 		ObjectMapper objectMapper = new ObjectMapper();
-		PostGistDto.PostGistResponse postGistResponse = objectMapper.readValue(postResponse.getBody().print(), PostGistDto.PostGistResponse.class);
+		GistsDto.GistDetails postGistResponse = objectMapper.readValue(postResponse.getBody().print(), GistsDto.GistDetails.class);
 
 		String id = postGistResponse.getId();
-
 		Response deleteResponse = client.deleteGist(id);
 
 		Assert.assertEquals(204, deleteResponse.getStatusCode());
 		Assert.assertTrue(deleteResponse.body().print().isEmpty());
-
 		Response getGists = client.getGists();
 		Assert.assertFalse(getGists.getBody().print().contains(id));
 	}
@@ -235,5 +168,29 @@ public class TestGist {
 	public void testDeleteNotExistingGists() {
 		Response deleteResponse = client.deleteGist("doesNotExists");
 		Assert.assertEquals(404, deleteResponse.getStatusCode());
+	}
+
+	@AfterClass
+	public static void tearDown() throws IOException {
+		GistsDto.GistDetails[] parsedGists = client.getParsedGists();
+		Arrays.asList(parsedGists).forEach((GistsDto.GistDetails gistDetails) -> {
+			client.deleteGist(gistDetails.getId());
+		});
+	}
+
+	private HashMap<String, FileDto> generateFiles(int filesNumber) {
+		HashMap<String, FileDto> inputFiles = new HashMap<>();
+		for (int i = 0; i < filesNumber; i++) {
+			inputFiles.put(UUID.randomUUID().toString(), new FileDto(UUID.randomUUID().toString()));
+		}
+		return inputFiles;
+	}
+
+	private void assertFilesEquals(HashMap<String, FileDto> expectedFiles, HashMap<String, FileDto> actualFiles) {
+		actualFiles.forEach((String responseFilesName, FileDto responseFile) -> {
+			Assert.assertTrue(expectedFiles.containsKey(responseFilesName));
+			FileDto inputFile = expectedFiles.get(responseFilesName);
+			Assert.assertEquals(inputFile.getContent(), responseFile.getContent());
+		});
 	}
 }
