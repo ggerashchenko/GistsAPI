@@ -1,0 +1,380 @@
+{
+  "type": "array",
+  "definitions": {},
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "items": {
+    "$id": "test/items",
+    "type": "object",
+    "properties": {
+      "url": {
+        "$id": "test/items/properties/url",
+        "type": "string",
+        "title": "The Url Schema ",
+        "default": "",
+        "examples": [
+          "https://api.github.com/gists/0adffbfc18e925114c83c9559ebd285d"
+        ]
+      },
+      "forks_url": {
+        "$id": "test/items/properties/forks_url",
+        "type": "string",
+        "title": "The Forks_url Schema ",
+        "default": "",
+        "examples": [
+          "https://api.github.com/gists/0adffbfc18e925114c83c9559ebd285d/forks"
+        ]
+      },
+      "commits_url": {
+        "$id": "test/items/properties/commits_url",
+        "type": "string",
+        "title": "The Commits_url Schema ",
+        "default": "",
+        "examples": [
+          "https://api.github.com/gists/0adffbfc18e925114c83c9559ebd285d/commits"
+        ]
+      },
+      "id": {
+        "$id": "test/items/properties/id",
+        "type": "string",
+        "title": "The Id Schema ",
+        "default": "",
+        "examples": [
+          "0adffbfc18e925114c83c9559ebd285d"
+        ]
+      },
+      "node_id": {
+        "$id": "test/items/properties/node_id",
+        "type": "string",
+        "title": "The Node_id Schema ",
+        "default": "",
+        "examples": [
+          "MDQ6R2lzdDBhZGZmYmZjMThlOTI1MTE0YzgzYzk1NTllYmQyODVk"
+        ]
+      },
+      "git_pull_url": {
+        "$id": "test/items/properties/git_pull_url",
+        "type": "string",
+        "title": "The Git_pull_url Schema ",
+        "default": "",
+        "examples": [
+          "https://gist.github.com/0adffbfc18e925114c83c9559ebd285d.git"
+        ]
+      },
+      "git_push_url": {
+        "$id": "test/items/properties/git_push_url",
+        "type": "string",
+        "title": "The Git_push_url Schema ",
+        "default": "",
+        "examples": [
+          "https://gist.github.com/0adffbfc18e925114c83c9559ebd285d.git"
+        ]
+      },
+      "html_url": {
+        "$id": "test/items/properties/html_url",
+        "type": "string",
+        "title": "The Html_url Schema ",
+        "default": "",
+        "examples": [
+          "https://gist.github.com/0adffbfc18e925114c83c9559ebd285d"
+        ]
+      },
+      "files": {
+        "$id": "test/items/properties/files",
+        "type": "object",
+        "properties": {
+          "file2.txt": {
+            "$id": "test/items/properties/files/properties/file2.txt",
+            "type": "object",
+            "properties": {
+              "filename": {
+                "$id": "test/items/properties/files/properties/file2.txt/properties/filename",
+                "type": "string",
+                "title": "The Filename Schema ",
+                "default": "",
+                "examples": [
+                  "file2.txt"
+                ]
+              },
+              "type": {
+                "$id": "test/items/properties/files/properties/file2.txt/properties/type",
+                "type": "string",
+                "title": "The Type Schema ",
+                "default": "",
+                "examples": [
+                  "text/plain"
+                ]
+              },
+              "language": {
+                "$id": "test/items/properties/files/properties/file2.txt/properties/language",
+                "type": "string",
+                "title": "The Language Schema ",
+                "default": "",
+                "examples": [
+                  "Text"
+                ]
+              },
+              "raw_url": {
+                "$id": "test/items/properties/files/properties/file2.txt/properties/raw_url",
+                "type": "string",
+                "title": "The Raw_url Schema ",
+                "default": "",
+                "examples": [
+                  "https://gist.githubusercontent.com/payconiqQA/0adffbfc18e925114c83c9559ebd285d/raw/b087a4c57f47ffad4025004869d7366ddc82d0d1/file2.txt"
+                ]
+              },
+              "size": {
+                "$id": "test/items/properties/files/properties/file2.txt/properties/size",
+                "type": "integer",
+                "title": "The Size Schema ",
+                "default": 0,
+                "examples": [
+                  20
+                ]
+              }
+            }
+          }
+        }
+      },
+      "public": {
+        "$id": "test/items/properties/public",
+        "type": "boolean",
+        "title": "The Public Schema ",
+        "default": false,
+        "examples": [
+          true
+        ]
+      },
+      "created_at": {
+        "$id": "test/items/properties/created_at",
+        "type": "string",
+        "title": "The Created_at Schema ",
+        "default": "",
+        "examples": [
+          "2018-07-30T07:06:36Z"
+        ]
+      },
+      "updated_at": {
+        "$id": "test/items/properties/updated_at",
+        "type": "string",
+        "title": "The Updated_at Schema ",
+        "default": "",
+        "examples": [
+          "2018-07-30T07:06:36Z"
+        ]
+      },
+      "description": {
+        "$id": "test/items/properties/description",
+        "type": "string",
+        "title": "The Description Schema ",
+        "default": "",
+        "examples": [
+          "the description for this gist"
+        ]
+      },
+      "comments": {
+        "$id": "test/items/properties/comments",
+        "type": "integer",
+        "title": "The Comments Schema ",
+        "default": 0,
+        "examples": [
+          0
+        ]
+      },
+      "user": {
+        "$id": "test/items/properties/user",
+        "type": "null",
+        "title": "The User Schema ",
+        "default": null,
+        "examples": [
+          null
+        ]
+      },
+      "comments_url": {
+        "$id": "test/items/properties/comments_url",
+        "type": "string",
+        "title": "The Comments_url Schema ",
+        "default": "",
+        "examples": [
+          "https://api.github.com/gists/0adffbfc18e925114c83c9559ebd285d/comments"
+        ]
+      },
+      "owner": {
+        "$id": "test/items/properties/owner",
+        "type": "object",
+        "properties": {
+          "login": {
+            "$id": "test/items/properties/owner/properties/login",
+            "type": "string",
+            "title": "The Login Schema ",
+            "default": "",
+            "examples": [
+              "payconiqQA"
+            ]
+          },
+          "id": {
+            "$id": "test/items/properties/owner/properties/id",
+            "type": "integer",
+            "title": "The Id Schema ",
+            "default": 0,
+            "examples": [
+              39983623
+            ]
+          },
+          "node_id": {
+            "$id": "test/items/properties/owner/properties/node_id",
+            "type": "string",
+            "title": "The Node_id Schema ",
+            "default": "",
+            "examples": [
+              "MDQ6VXNlcjM5OTgzNjIz"
+            ]
+          },
+          "avatar_url": {
+            "$id": "test/items/properties/owner/properties/avatar_url",
+            "type": "string",
+            "title": "The Avatar_url Schema ",
+            "default": "",
+            "examples": [
+              "https://avatars1.githubusercontent.com/u/39983623?v=4"
+            ]
+          },
+          "gravatar_id": {
+            "$id": "test/items/properties/owner/properties/gravatar_id",
+            "type": "string",
+            "title": "The Gravatar_id Schema ",
+            "default": "",
+            "examples": [
+              ""
+            ]
+          },
+          "url": {
+            "$id": "test/items/properties/owner/properties/url",
+            "type": "string",
+            "title": "The Url Schema ",
+            "default": "",
+            "examples": [
+              "https://api.github.com/users/payconiqQA"
+            ]
+          },
+          "html_url": {
+            "$id": "test/items/properties/owner/properties/html_url",
+            "type": "string",
+            "title": "The Html_url Schema ",
+            "default": "",
+            "examples": [
+              "https://github.com/payconiqQA"
+            ]
+          },
+          "followers_url": {
+            "$id": "test/items/properties/owner/properties/followers_url",
+            "type": "string",
+            "title": "The Followers_url Schema ",
+            "default": "",
+            "examples": [
+              "https://api.github.com/users/payconiqQA/followers"
+            ]
+          },
+          "following_url": {
+            "$id": "test/items/properties/owner/properties/following_url",
+            "type": "string",
+            "title": "The Following_url Schema ",
+            "default": "",
+            "examples": [
+              "https://api.github.com/users/payconiqQA/following{/other_user}"
+            ]
+          },
+          "gists_url": {
+            "$id": "test/items/properties/owner/properties/gists_url",
+            "type": "string",
+            "title": "The Gists_url Schema ",
+            "default": "",
+            "examples": [
+              "https://api.github.com/users/payconiqQA/gists{/gist_id}"
+            ]
+          },
+          "starred_url": {
+            "$id": "test/items/properties/owner/properties/starred_url",
+            "type": "string",
+            "title": "The Starred_url Schema ",
+            "default": "",
+            "examples": [
+              "https://api.github.com/users/payconiqQA/starred{/owner}{/repo}"
+            ]
+          },
+          "subscriptions_url": {
+            "$id": "test/items/properties/owner/properties/subscriptions_url",
+            "type": "string",
+            "title": "The Subscriptions_url Schema ",
+            "default": "",
+            "examples": [
+              "https://api.github.com/users/payconiqQA/subscriptions"
+            ]
+          },
+          "organizations_url": {
+            "$id": "test/items/properties/owner/properties/organizations_url",
+            "type": "string",
+            "title": "The Organizations_url Schema ",
+            "default": "",
+            "examples": [
+              "https://api.github.com/users/payconiqQA/orgs"
+            ]
+          },
+          "repos_url": {
+            "$id": "test/items/properties/owner/properties/repos_url",
+            "type": "string",
+            "title": "The Repos_url Schema ",
+            "default": "",
+            "examples": [
+              "https://api.github.com/users/payconiqQA/repos"
+            ]
+          },
+          "events_url": {
+            "$id": "test/items/properties/owner/properties/events_url",
+            "type": "string",
+            "title": "The Events_url Schema ",
+            "default": "",
+            "examples": [
+              "https://api.github.com/users/payconiqQA/events{/privacy}"
+            ]
+          },
+          "received_events_url": {
+            "$id": "test/items/properties/owner/properties/received_events_url",
+            "type": "string",
+            "title": "The Received_events_url Schema ",
+            "default": "",
+            "examples": [
+              "https://api.github.com/users/payconiqQA/received_events"
+            ]
+          },
+          "type": {
+            "$id": "test/items/properties/owner/properties/type",
+            "type": "string",
+            "title": "The Type Schema ",
+            "default": "",
+            "examples": [
+              "User"
+            ]
+          },
+          "site_admin": {
+            "$id": "test/items/properties/owner/properties/site_admin",
+            "type": "boolean",
+            "title": "The Site_admin Schema ",
+            "default": false,
+            "examples": [
+              false
+            ]
+          }
+        }
+      },
+      "truncated": {
+        "$id": "test/items/properties/truncated",
+        "type": "boolean",
+        "title": "The Truncated Schema ",
+        "default": false,
+        "examples": [
+          false
+        ]
+      }
+    }
+  }
+}
