@@ -35,8 +35,8 @@ public class TestGist {
 		GistsDto.GistDetails[] parsedGists = client.getParsedGists();
 
 		for (GistsDto.GistDetails gist : parsedGists) {
-			Assert.assertTrue(Objects.nonNull(gist.getId()));
-			Assert.assertTrue(StringUtils.isNoneEmpty(gist.getId()));
+			Assert.assertTrue("Gist id is null.", Objects.nonNull(gist.getId()));
+			Assert.assertTrue("Gist id is empty", StringUtils.isNoneEmpty(gist.getId()));
 		}
 	}
 
@@ -158,9 +158,9 @@ public class TestGist {
 		Response deleteResponse = client.deleteGist(id);
 
 		Assert.assertEquals(204, deleteResponse.getStatusCode());
-		Assert.assertTrue(deleteResponse.body().print().isEmpty());
+		Assert.assertTrue("response after delete contains non empty body", deleteResponse.body().print().isEmpty());
 		Response getGists = client.getGists();
-		Assert.assertFalse(getGists.getBody().print().contains(id));
+		Assert.assertFalse("Deleted file is present in the gist", getGists.getBody().print().contains(id));
 	}
 
 	@Test
@@ -190,7 +190,7 @@ public class TestGist {
 		actualFiles.forEach((String responseFilesName, FileDto responseFile) -> {
 			Assert.assertTrue(expectedFiles.containsKey(responseFilesName));
 			FileDto inputFile = expectedFiles.get(responseFilesName);
-			Assert.assertEquals(inputFile.getContent(), responseFile.getContent());
+			Assert.assertEquals("Input files and response files are not the same", inputFile.getContent(), responseFile.getContent());
 		});
 	}
 }
