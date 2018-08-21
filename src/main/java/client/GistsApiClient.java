@@ -10,13 +10,16 @@ import org.junit.Assume;
 import utils.TestPropertiesLoader;
 
 import java.io.IOException;
+import java.util.Base64;
 
 public class GistsApiClient {
 	static {
 		RestAssured.baseURI = TestPropertiesLoader.getBaseUrl();
 	}
 
-	private String token = TestPropertiesLoader.getToken();
+	private String tokenEncoded = TestPropertiesLoader.getToken();
+	byte[] decodedBytes = Base64.getDecoder().decode(tokenEncoded);
+	String token = new String(decodedBytes);
 
 	public Response getGists() {
 		return RestAssured.given()
