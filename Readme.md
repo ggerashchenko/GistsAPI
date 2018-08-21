@@ -28,4 +28,4 @@ you need to install `allure` with `brew install allure`. In case you do not have
 of the report in `allure-report-example/index.html`.
 
 ## What could be improved : 
-- Data provider with various test data sets can be created. Data model can cover all request/response fields.
+- Data provider with various test data sets can be created. Data model can cover all request/response fields. Can be added logger to requests and responses.
