@@ -35,7 +35,7 @@ public class GistsApiClient {
 		ObjectMapper jacksonObjectMapper = new ObjectMapper();
 		String bodyString = jacksonObjectMapper.writeValueAsString(gist);
 		RestAssured.given()
-				.header("Authorization", "Bearer " + token)
+				.header("Authorization", "Bearer " + System.getProperty("token"))
 				.contentType("application/json")
 				.body(bodyString)
 				.expect()
@@ -48,7 +48,7 @@ public class GistsApiClient {
 		ObjectMapper jacksonObjectMapper = new ObjectMapper();
 		String bodyString = jacksonObjectMapper.writeValueAsString(gist);
 		return RestAssured.given()
-				.header("Authorization", "Bearer " + token)
+				.header("Authorization", "Bearer " + System.getProperty("token"))
 				.contentType("application/json")
 				.body(bodyString)
 				.when()
